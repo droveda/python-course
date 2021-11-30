@@ -46,4 +46,14 @@
 * metodos estáticos
     * @staticmethod
 * atributos estáticos
-  * apenas definir uma variavel na classes fora do __init__
+    * apenas definir uma variavel na classes fora do __init__
+    * __class__.tamanho_cpf (exemplo de como acessar atributo estatico dentro da classe)
+* Herança em python eh feita assim:
+    * class Filme(Programa):
+        * classe Filme extends Programa
+    * exemplo chamada ao super: super().__init__(nome, ano)
+* toString() -> def __str__(self):
+* Exemplo de classe abstrata e metodo abstrato
+    * programa.py
+* Exemplo Herança Múltipla
+    * sistema.py
