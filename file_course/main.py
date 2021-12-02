@@ -1,34 +1,30 @@
-class Main:
+from converter_util import ConverterUtil
 
+
+class Main:
     def __init__(self):
         pass
 
-    def read_file(self):
-        try:
-            with open('dados/contatos.csv', 'r') as my_file:
-                for line in my_file:
-                    print(line, end='')
-        except FileNotFoundError:
-            print('Arquivo nao encontrado')
+    def initializer(self):
+        converter = ConverterUtil()
+        contatos = converter.csv_para_contatos('dados/contatos.csv')
+        converter.contatos_para_pickle(contatos, 'dados/contatos.pickle')
+        print(contatos)
 
-    def write_file(self):
-        print('')
-        file = open('dados/contatos-escrita.csv', 'a+')
-        contatos = ['11,teste,teste@gmail.com\n', '12,test2,teste2@gmail.com\n', '13,teste3,teste3@gmail.com\n']
+        contatos2 = converter.pickle_para_contatos('dados/contatos.pickle')
+        print(contatos2)
 
-        for contato in contatos:
-            file.write(contato)
+        for contato in contatos2:
+            print(f'{contato.id} - {contato.nome} - {contato.email}')
 
-        file.flush()
+        # converter.contatos_para_json(contatos, 'dados/contatos.json')
 
-        file.seek(0)  # volta para o inicio do arquivo
-        for linha in file:
-            print(linha, end='')
+        contatos3 = converter.json_para_contatos('dados/contatos.json')
 
-        file.close()
+        for contato in contatos3:
+            print(f'{contato.id} - {contato.nome} - {contato.email}')
 
 
 if __name__ == '__main__':
     main = Main()
-    main.read_file()
-    # main.write_file()
+    main.initializer()
