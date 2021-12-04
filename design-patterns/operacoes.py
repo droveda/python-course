@@ -1,4 +1,14 @@
-class Subtracao:
+from abc import ABCMeta, abstractmethod
+
+
+class Expressao(metaclass=ABCMeta):
+
+    @abstractmethod
+    def avalia(self):
+        pass
+
+
+class Subtracao(Expressao):
     def __init__(self, expressao_esquerda, expressao_direita):
         self.__expressao_esquerda = expressao_esquerda
         self.__expressao_direita = expressao_direita
@@ -7,7 +17,7 @@ class Subtracao:
         return self.__expressao_esquerda.avalia() - self.__expressao_direita.avalia()
 
 
-class Soma:
+class Soma(Expressao):
     def __init__(self, expressao_esquerda, expressao_direita):
         self.__expressao_esquerda = expressao_esquerda
         self.__expressao_direita = expressao_direita
@@ -16,7 +26,7 @@ class Soma:
         return self.__expressao_esquerda.avalia() + self.__expressao_direita.avalia()
 
 
-class Numero:
+class Numero(Expressao):
     def __init__(self, numero):
         self.__numero = numero
 
