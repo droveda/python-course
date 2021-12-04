@@ -1,4 +1,4 @@
-from impostos import ICMS, ISS, XYZ
+from impostos import ICMS, ISS, XYZ, IKCV, ICPP
 from orcamento import Orcamento, Item
 
 
@@ -20,4 +20,10 @@ if __name__ == '__main__':
     calc = CalculadorDeImpostos()
     calc.realiza_calculo(orcamento, ISS())
     calc.realiza_calculo(orcamento, ICMS())
+    calc.realiza_calculo(orcamento, ISS(ICMS()))
     calc.realiza_calculo(orcamento, XYZ())
+
+    print('ICPP, IKCV')
+    calc.realiza_calculo(orcamento, ICPP())
+    calc.realiza_calculo(orcamento, IKCV())
+    calc.realiza_calculo(orcamento, ICPP(IKCV()))
