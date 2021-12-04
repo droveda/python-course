@@ -31,7 +31,11 @@ class EmAprovacao(EstadoOrcamento):
         raise Exception('orcamento em aprovacao nao podem ir para finalizado')
 
     def aplica_desconto_extra(self, orcamento):
-        orcamento.adiciona_desconto_extra(orcamento.valor * 0.02)
+        if not orcamento.desconto_ja_aplicado:
+            orcamento.adiciona_desconto_extra(orcamento.valor * 0.02)
+            orcamento.desconto_ja_aplicado = True
+        else:
+            raise Exception('desconto ja aplicado')
 
 
 class Aprovado(EstadoOrcamento):
@@ -45,7 +49,11 @@ class Aprovado(EstadoOrcamento):
         orcamento._estado_atual = Finalizado()
 
     def aplica_desconto_extra(self, orcamento):
-        orcamento.adiciona_desconto_extra(orcamento.valor * 0.05)
+        if not orcamento.desconto_ja_aplicado:
+            orcamento.adiciona_desconto_extra(orcamento.valor * 0.05)
+            orcamento.desconto_ja_aplicado = True
+        else:
+            raise Exception('desconto ja aplicado')
 
 
 class Reprovado(EstadoOrcamento):
@@ -82,12 +90,17 @@ class Orcamento(object):
         self.__itens = []
         self._estado_atual = EmAprovacao()
         self.__desconto_extra = 0
+        self.desconto_ja_aplicado = False
 
     def aplica_desconto_extra(self):
         self._estado_atual.aplica_desconto_extra(self)
 
     def adiciona_desconto_extra(self, desconto):
         self.__desconto_extra += desconto
+
+    @property
+    def estado_atual(self):
+        return self._estado_atual
 
     @property
     def valor(self):
@@ -136,11 +149,12 @@ if __name__ == '__main__':
     o.adiciona_item(Item('Item2', 50))
     o.adiciona_item(Item('Item3', 400))
 
-    print(o.valor)
+    print(f'{o.valor} - {o.estado_atual}')
     o.aplica_desconto_extra()
     print(o.valor)
 
     o.aprova()
-    o.aplica_desconto_extra()
-    print(o.valor)
+    print(f'{o.valor} - {o.estado_atual}')
     o.finaliza()
+
+    print(f'{o.valor} - {o.estado_atual}')
