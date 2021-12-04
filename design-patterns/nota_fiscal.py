@@ -1,5 +1,7 @@
 from datetime import date
 
+from observadores import imprime, salva_no_banco, envia_por_email
+
 
 class NotaFiscalBuilder:
     def __init__(self):
@@ -66,7 +68,9 @@ class Item:
 
 class NotaFiscal:
     def __init__(self, razao_social: str, cnpj: str, itens,
-                 data_de_emissao: date = date.today(), detalhes: str = ''):
+                 data_de_emissao: date = date.today(), detalhes: str = '',
+                 observadores=[]):
+        self.__observadores = observadores
         self.__razao_social = razao_social
         self.__cnpj = cnpj
         self.__itens = itens
@@ -74,6 +78,12 @@ class NotaFiscal:
         if len(detalhes) > 20:
             raise Exception('Detalhes da nota nao pode ter mais que 20 caracteres')
         self.__detalhes = detalhes
+
+        for observador in self.__observadores:
+            observador(self)
+
+    def addAcao(self, execucao):
+        self.__observadores.append(execucao)
 
     @property
     def razao_social(self):
@@ -101,7 +111,8 @@ if __name__ == '__main__':
     nota_fiscal = NotaFiscal(
         razao_social='Empresa LTDS',
         cnpj='012345670001',
-        itens=itens
+        itens=itens,
+        observadores=[imprime, salva_no_banco, envia_por_email]
     )
 
     nf = NotaFiscalBuilder() \
